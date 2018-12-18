@@ -10,6 +10,8 @@ const CACHE_PATH =  process.argv[2] || '/data';
 
 const LOG_CACHE_FILENAME = 'lastLogFile';
 
+const lastLogFile = './lastLogFile';
+
 function touchSync2(path){
     if (fs.existsSync(path)) return;
     fs.closeSync(fs.openSync(path, 'a'));
@@ -20,7 +22,7 @@ function touchSync2(path){
     fs.mkdirSync(logPath);
 })(CACHE_PATH)
 
-const readLogLast = ((cacheTo) => {
+function readLogLast() { ((cacheTo) => {
     touchSync2(cacheTo);
     
     const rf = promisify(fs.readFile);
@@ -36,10 +38,9 @@ const readLogLast = ((cacheTo) => {
     return writeLast2(msg);
 
 })( path.join(CACHE_PATH, LOG_CACHE_FILENAME) );
+}
 
 fs.watchFile(lastLogFile, (curr, prev) => {
   console.log(`${lastLogFile} file Changed`);
-  readLogLast().then(() => {
-    console.log('done');
-  });
+  readLogLast();
 });
