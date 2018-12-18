@@ -1,0 +1,23 @@
+{
+  "name": "docker-assignment-2-2",
+  "version": "1.0.0",
+  "description": "Cloud Computing, Fall Semester, 2018",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/younghk/docker-assignment-2-2.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/younghk/docker-assignment-2-2/issues"
+  },
+  "homepage": "https://github.com/younghk/docker-assignment-2-2#readme",
+  "dependencies": {
+    "log-timestamp": "^0.2.1"
+  }
+}
