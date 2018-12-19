@@ -36,20 +36,14 @@ function readLogLast() { ((cacheTo, cacheTo2) => {
     }) }
     
     const ret = true;
-    console.log("cacheTo : ",cacheTo);
-    console.log("cacheTo2 : ",cacheTo2);
  
     let last = null;
     let release = null;
-    console.log("here0");
     return lockfile.lock(cacheTo).then((_release) => {
         release = _release;
-        console.log("here1");
         return readLast2();
     }).then((lastMsg) => {
         last = lastMsg;
-        console.log("lastMsg : ",lastMsg);
-        console.log("last : ",last);
         return writeLast2(lastMsg+"\n");
     }).then(()=> {
         release();
