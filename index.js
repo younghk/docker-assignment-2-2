@@ -12,28 +12,26 @@ const CACHE_PATH =  process.argv[2] || '/data';
 const LAST_CACHE_FILENAME = '.last';
 const LOG_CACHE_FILENAME = 'lastLogFile';
 
-const lastLogFile = path.join(CACHE_PATH, LAST_CACHE_FILENAME);
+const LAST_LOG_PATH_FILE = path.join(CACHE_PATH, LAST_CACHE_FILENAME);
 
-function touchSync2(path){
+function matchSync2(path){
     if (fs.existsSync(path)) return;
     fs.closeSync(fs.openSync(path, 'a'));
 }
 
-((logPath)=>{
-    if(fs.existsSync(logPath)) return;
-    fs.mkdirSync(logPath);
+((LOG_PATH)=>{
+    if(fs.existsSync(LOG_PATH)) return;
+    fs.mkdirSync(LOG_PATH);
 })(CACHE_PATH)
 
 function readLogLast() { ((cacheTo, cacheTo2) => {
-    touchSync2(cacheTo);
+    matchSync2(cacheTo);
     
     const rf = promisify(fs.readFile);
     const wf = promisify(fs.writeFile);
 
-    function readLast2() { return rf(cacheTo2); }
-    function writeLast2(msg){ return wf(cacheTo, msg, {
-        flag: 'a'
-    }) }
+    function readLast() { return rf(cacheTo2); }
+    function writeLast(message){ return wf(cacheTo, message, {flag: 'a'}) }
     
     const ret = true;
  
@@ -41,10 +39,10 @@ function readLogLast() { ((cacheTo, cacheTo2) => {
     let release = null;
     return lockfile.lock(cacheTo).then((_release) => {
         release = _release;
-        return readLast2();
+        return readLast();
     }).then((lastMsg) => {
         last = lastMsg;
-        return writeLast2(lastMsg+"\n");
+        return writeLast(lastMsg+"\n");
     }).then(()=> {
         release();
         return (last + " " + ret);
@@ -54,9 +52,9 @@ function readLogLast() { ((cacheTo, cacheTo2) => {
 })( path.join(CACHE_PATH, LOG_CACHE_FILENAME),path.join(CACHE_PATH, LAST_CACHE_FILENAME) );
 }
 
-console.log(lastLogFile);
+console.log(LAST_LOG_PATH_FILE);
 
-fs.watchFile(lastLogFile, (curr, prev) => {
-  console.log(`${lastLogFile} file Changed`);
+fs.watchFile(LAST_LOG_PATH_FILE, (curr, prev) => {
+  console.log(`${LAST_LOG_PATH_FILE} file Changed`);
   readLogLast();
 });
